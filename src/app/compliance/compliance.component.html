@@ -1,4 +1,8 @@
 <div class="compliance-container">
+  <mat-form-field class="search">
+    <mat-label>Search</mat-label>
+    <input matInput (keyup)="applyFilter($event)" #input>
+  </mat-form-field>
 
   <table mat-table [dataSource]="dataSource" matSort matSortActive="row_number" matSortDirection="asc"
     class="mat-elevation-z8">
