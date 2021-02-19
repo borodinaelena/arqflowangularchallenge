@@ -36,10 +36,10 @@ export class ListComponent implements OnInit {
     this.service.getBidRates()
       .subscribe(rates => {
         this.bidRates = rates;
+
         this.service.getAccounts()
           .subscribe(res => {
             this.accounts = res;
-
             rates.map(item => {
               const alreadyAdded = this.tableData.find(
                 function (value) {
@@ -62,6 +62,7 @@ export class ListComponent implements OnInit {
                 this.addAccountInfo(item, this.tableData[this.tableData.length - 1]);
               }
             })
+            
             this.getRateColors();
 
             this.dataSource = new MatTableDataSource(this.tableData);
@@ -109,11 +110,9 @@ export class ListComponent implements OnInit {
   }
 
   getClass(rate) {
-
     if (!rate) {
       return 'white'
     }
-
     const color = rate < this.yelowRate ? 'yellow' :
       (rate < this.limeRate ? 'lime' :
         (rate < this.lightGreenRate ? 'ligth' : 'green'));

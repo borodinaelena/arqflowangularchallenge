@@ -12,7 +12,7 @@ import { DataService } from '../service/data.service';
 export class ComplianceComponent implements OnInit {
 
   public complianceValues: BidComplianceValue[];
-  public displayedColumns: string[];
+  public displayedColumns: string[] = [];
   public tableData = [];
   public dataSource = new MatTableDataSource([]);
   public accounts: Account[];
@@ -27,9 +27,7 @@ export class ComplianceComponent implements OnInit {
       'reference',
       'description',
       'type',
-      'requirement',
-      's1',
-      's2'
+      'requirement'
     ];
     this.service.getBidComplianceValues()
       .subscribe(res => {
@@ -39,24 +37,25 @@ export class ComplianceComponent implements OnInit {
             this.accounts = res;
 
             this.complianceValues.map(item => {
+
+              this.checkColumn(item);
+
               const alreadyAdded = this.tableData.find(
                 function (value) {
                   return value.reference == item.compliance_field.reference;
                 }
               )
               if (alreadyAdded) {
-                alreadyAdded['s' + item.compliance_field.row_number] = item.value;
+                alreadyAdded['s' + item.bid.supplier.id] = item.bid.supplier.name;
               }
               else {
                 this.tableData.push({
                   reference: item.compliance_field.reference,
                   description: item.compliance_field.description,
                   type: item.compliance_field.type,
-                  requirement: item.compliance_field.requirement,
-                  s1: null,
-                  s2: null,
+                  requirement: item.compliance_field.requirement
                 })
-                this.tableData[this.tableData.length - 1]['s' + item.compliance_field.row_number] = item.value;
+                this.tableData[this.tableData.length - 1]['s' + item.bid.supplier.id] = item.bid.supplier.name;
               }
             })
             this.dataSource = new MatTableDataSource(this.tableData);
@@ -65,5 +64,16 @@ export class ComplianceComponent implements OnInit {
       })
   }
 
+  checkColumn(item) {
+    const colomnAdded = this.displayedColumns.find(
+      function (value) {
+        return value == 's' + item.bid.supplier.id;
+      }
+    )
+    if (colomnAdded === undefined) {
+      this.displayedColumns.push('s' + item.bid.supplier.id);
+      this.accountRows.push(item.bid.supplier);
+    }
+  }
 
 }
