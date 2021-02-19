@@ -1,0 +1,60 @@
+<div class="list-container">
+  <mat-form-field class="search">
+    <mat-label>Search</mat-label>
+    <input matInput (keyup)="applyFilter($event)" #input>
+  </mat-form-field>
+
+  <table mat-table [dataSource]="dataSource" matSort matSortActive="row_number" matSortDirection="asc"
+    class="mat-elevation-z8">
+
+    <ng-container matColumnDef="description">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef> Description </th>
+      <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+      <td mat-footer-cell *matFooterCellDef>  </td>
+    </ng-container>
+
+    <ng-container matColumnDef="reference">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef> Reference </th>
+      <td mat-cell *matCellDef="let element"> {{element.reference}} </td>
+      <td mat-footer-cell *matFooterCellDef>  </td>
+    </ng-container>
+    <ng-container matColumnDef="scope">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef> Scope </th>
+      <td mat-cell *matCellDef="let element"> {{element.scope}} </td>
+      <td mat-footer-cell *matFooterCellDef>  </td>
+    </ng-container>
+
+    <ng-container matColumnDef="quantity">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef> Quantity </th>
+      <td mat-cell *matCellDef="let element"> {{element.quantity}} {{element.units}} </td>
+      <td mat-footer-cell *matFooterCellDef>  </td>
+    </ng-container>
+
+    <div *ngFor="let i of accountRows" class="section">
+
+
+      <ng-container [matColumnDef]="'supplier' + i.id + 'Rate'">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> Rate </th>
+        <td mat-cell *matCellDef="let element" [class.green]="getClass(element['supplier' + i.id + 'Rate'])==='green'"
+          [class.ligth]="getClass(element['supplier' + i.id + 'Rate'])==='ligth'"
+          [class.lime]="getClass(element['supplier' + i.id + 'Rate'])==='lime'"
+          [class.yellow]="getClass(element['supplier' + i.id + 'Rate'])==='yellow'"
+          [class.white]="getClass(element['supplier' + i.id + 'Rate'])==='white'" class="section">
+          {{element['supplier' + i.id + 'Rate']}}
+          <div class="header"> {{i.name}} </div>
+        </td>
+        <td mat-footer-cell *matFooterCellDef class="right"> Total: </td>
+      </ng-container>
+
+      <ng-container [matColumnDef]="'supplier' + i.id + 'Amount'">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> Amount </th>
+        <td mat-cell *matCellDef="let element" class="section"> {{element['supplier' + i.id + 'Amount']}} </td>
+        <td mat-footer-cell *matFooterCellDef> {{getTotal(i)}} </td>
+      </ng-container>
+    </div>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+  </table>
+</div>
